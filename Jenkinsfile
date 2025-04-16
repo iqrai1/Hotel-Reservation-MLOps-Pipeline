@@ -21,12 +21,18 @@ pipeline{
             steps{
                 script{
                     echo 'Setting up our Virtual Environment and Installing dependancies............'
-                    sh '''
-                    python -m venv ${VENV_DIR}
-                    . ${VENV_DIR}/bin/activate
-                    pip install --upgrade pip
-                    pip install -e .
-                    '''
+                    try{
+                        sh '''
+                        python -m venv ${VENV_DIR}
+                        . ${VENV_DIR}/bin/activate
+                        pip install --upgrade pip
+                        pip install -e .
+                        '''
+                }
+                catch (e)
+                {
+                    echo "Error in setting up virtual environment: ${e}"
+                    error("Failed to set up virtual environment")
                 }
             }
         }
